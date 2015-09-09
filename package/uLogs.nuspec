@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>uLogs</id>
+    <version>1.0.6-RC</version>
+    <authors>WMK.IO</authors>
+    <owners>WMK.IO</owners>
+    <licenseUrl>https://raw.githubusercontent.com/wkallhof/uLogs/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/wkallhof/uLogs</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/wkallhof/uLogs/master/package/uLogsLogo.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Umbraco Trace Log viewer for the Umbraco 7.3 Back-Office</description>
+    <copyright>Copyright 2015</copyright>
+    <tags>umbraco</tags>
+    <dependencies>
+      <dependency id="UmbracoCms" version="7.3.0-RC" />
+    </dependencies>
+  </metadata>
+  <files>
+  	<file src="..\source\uLogs\bin\release\uLogs.dll" target="lib\net452" />
+    <file src="..\source\uLogs\uLogs.Client\**\*.*" target="content\App_Plugins\uLogs" /> 
+    <file src="Dashboard.config.install.xdt" target="content\Config"/>
+    <file src="Dashboard.config.uninstall.xdt" target="content\Config"/>
+  </files>
+</package>

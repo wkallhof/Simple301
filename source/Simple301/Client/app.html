@@ -1,0 +1,110 @@
+﻿<div id="Simple301" ng-controller="Simple301Controller" class="tables-data">
+    <div class="main-container  theme-template-dark ng-scope theme-template-light theme-deep-orange alert-open alert-with-mat-grow-top-right">
+        <div class="main-content" autoscroll="true" bs-affix-target="" init-ripples="">
+
+            <section class="tables-data forms-advanced">
+
+                <!-- Header Content -->
+                <div class="page-header">
+                    <h1>
+                        <i class="md md-list"></i>
+                        Simple 301 - Redirect Manager
+                    </h1>
+                    <p class="lead">
+                        Add, Update, and Delete 301 redirects in the table below. 
+                    </p>
+                </div>
+
+                <!-- Filter Content -->
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h3 class="table-title p-20"> {{redirects.length}} rows</h3>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="table-search">
+                                <input type="text" ng-model="tableParams.filter()['Search']" class="form-control" placeholder="Search redirects" autofocus no-dirty-check/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Error Message Content -->
+                    <div class="row" ng-show="errorMessage.length > 0">
+                        <div class="col-md-12">
+                            <div class="bs-component">
+                                <div class="alert alert-dismissible alert-danger">
+                                    <button type="button" class="close" ng-click="clearErrorMessage()">×</button>
+                                    <p> Error : {{errorMessage}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Redirect Table -->
+                    <div class="table-responsive white">
+                        <table ng-table="tableParams" template-header="header" template-pagination="pager" class="table table-full table-full-small">
+                            <tbody>
+                                <tr ng-repeat="item in $data">
+                                    <td data-title="'Old Url'" sortable="'OldUrl'">
+                                        <a ng-if="!item.$edit" href="{{item.OldUrl}}" target="_blank">{{item.OldUrl}}</a>
+                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.OldUrl" placeholder="Old Url" no-dirty-check/></div>
+                                    </td>
+                                    <td data-title="'New Url'" sortable="'NewUrl'">
+                                        <a ng-if="!item.$edit" href="{{item.NewUrl}}" target="_blank">{{item.NewUrl}}</a>
+                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.NewUrl" placeholder="New Url" no-dirty-check/></div>
+                                    </td>
+                                    <td data-title="'Notes'" sortable="'Notes'">
+                                        <span ng-if="!item.$edit">{{item.Notes}}</span>
+                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.Notes" placeholder="Notes" no-dirty-check/></div>
+                                    </td>
+                                    <td data-title="'Last Updated'" sortable="'LastUpdated'">
+                                        {{ item.LastUpdated | date:'M/d/yy h:mm a' }}
+                                    </td>
+                                    <td data-title="'Actions'">
+                                        <button ng-if="!item.$edit" ng-click="item.$edit = true" class="btn btn-info">Edit</button>
+                                        <button ng-if="item.$edit  && item.Id != -1" ng-click="updateRedirect(item)" class="btn btn-success">Save</button>
+                                        <button ng-if="item.Id != -1" class="btn btn-danger" ng-click="deleteRedirect(item)">Delete</button>
+                                        <button ng-if="item.$edit  && item.Id == -1" ng-click="addRedirect(item)" class="btn btn-primary">Add</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination Template for ngTable redirect table -->
+<script type="text/ng-template" id="pager">
+
+    <div class="p-20">
+        <ul class="pager">
+            <li ng-repeat="page in pages"
+                ng-class="{'disabled': !page.active, 'previous': page.type == 'prev', 'next': page.type == 'next'}"
+                ng-show="page.type == 'prev' || page.type == 'next'" ng-switch="page.type">
+                <button type="button" ng-switch-when="prev" ng-click="params.page(page.number)" class="btn btn-default pull-left">&laquo; Previous</button>
+                <button type="button" ng-switch-when="next" ng-click="params.page(page.number)" class="btn btn-default pull-right">Next &raquo;</button>
+            </li>
+            <li>
+                <div class="btn-group">
+                    <button type="button" ng-class="{'active':params.count() == 10}" ng-click="params.count(10)" class="btn btn-default">10</button>
+                    <button type="button" ng-class="{'active':params.count() == 25}" ng-click="params.count(25)" class="btn btn-default">25</button>
+                    <button type="button" ng-class="{'active':params.count() == 50}" ng-click="params.count(50)" class="btn btn-default">50</button>
+                    <button type="button" ng-class="{'active':params.count() == 100}" ng-click="params.count(100)" class="btn btn-default">100</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</script>
+
+<!-- Header Template for ngTable redirect table -->
+<script type="text/ng-template" id="header">
+    <tr>
+        <th title="{{$column.headerTitle(this)}}" ng-repeat="$column in $columns" ng-class="{ 'sortable': $column.sortable(this), 'sort-asc': params.sorting()[$column.sortable(this)]=='asc', 'sort-desc': params.sorting()[$column.sortable(this)]=='desc' }" ng-click="sortBy($column, $event)" ng-show="$column.show(this)" ng-init="template=$column.headerTemplateURL(this)" class="header {{$column.class(this)}}">
+            <div ng-if="!template" ng-show="!template" class="ng-table-header" ng-class="{'sort-indicator': $column.sortIndicator(this)=='div'}"> <span ng-bind="$column.title(this)" ng-class="{'sort-indicator': $column.sortIndicator(this)=='span'}"></span> </div>
+            <div ng-if="template" ng-show="template" ng-include="template"></div>
+        </th>
+    </tr>
+</script>
