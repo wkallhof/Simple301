@@ -1,15 +1,14 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>uLogs</id>
-    <version>1.0.6-RC</version>
+    <id>Simple301</id>
+    <version>1.0.0-RC</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
-    <licenseUrl>https://raw.githubusercontent.com/wkallhof/uLogs/master/LICENSE</licenseUrl>
-    <projectUrl>https://github.com/wkallhof/uLogs</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/wkallhof/uLogs/master/package/uLogsLogo.png</iconUrl>
+    <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/wkallhof/Simple301</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Umbraco Trace Log viewer for the Umbraco 7.3 Back-Office</description>
+    <description>Umbraco 301 Redirect Manager for the Umbraco 7.3 Back-Office</description>
     <copyright>Copyright 2015</copyright>
     <tags>umbraco</tags>
     <dependencies>
@@ -17,8 +16,8 @@
     </dependencies>
   </metadata>
   <files>
-  	<file src="..\source\uLogs\bin\release\uLogs.dll" target="lib\net452" />
-    <file src="..\source\uLogs\uLogs.Client\**\*.*" target="content\App_Plugins\uLogs" /> 
+  	<file src="..\source\Simple301\bin\release\Simple301.dll" target="lib\net452" />
+    <file src="..\source\Simple301\Client\**\*.*" target="content\App_Plugins\Simple301" /> 
     <file src="Dashboard.config.install.xdt" target="content\Config"/>
     <file src="Dashboard.config.uninstall.xdt" target="content\Config"/>
   </files>

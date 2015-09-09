@@ -283,100 +283,21 @@
     <Compile Include="Core\RedirectRepository.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Client\app.html" />
-    <Content Include="Client\assets\fonts\fontawesome-webfont.svg" />
-    <Content Include="Client\assets\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Client\assets\fonts\Material-Design-Iconic-Font.svg" />
-    <Content Include="Client\assets\fonts\Roboto-Black.svg" />
-    <Content Include="Client\assets\fonts\Roboto-BlackItalic.svg" />
-    <Content Include="Client\assets\fonts\Roboto-Bold.svg" />
-    <Content Include="Client\assets\fonts\Roboto-BoldItalic.svg" />
-    <Content Include="Client\assets\fonts\Roboto-Light.svg" />
-    <Content Include="Client\assets\fonts\Roboto-LightItalic.svg" />
-    <Content Include="Client\assets\fonts\Roboto-Medium.svg" />
-    <Content Include="Client\assets\fonts\Roboto-MediumItalic.svg" />
-    <Content Include="Client\assets\fonts\Roboto-Regular.svg" />
-    <Content Include="Client\assets\fonts\Roboto-RegularItalic.svg" />
-    <Content Include="Client\assets\fonts\Roboto-Thin.svg" />
-    <Content Include="Client\assets\fonts\Roboto-ThinItalic.svg" />
-    <Content Include="Client\assets\fonts\weathericons-regular-webfont.svg" />
-    <Content Include="Client\assets\scripts\app.js" />
-    <Content Include="Client\assets\scripts\vendors.min.js" />
-    <Content Include="Client\assets\styles\styles.min.css" />
-    <Content Include="Client\assets\styles\styles.prefixed.min.css" />
-    <Content Include="Client\assets\styles\vendors.min.css" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
+    <Content Include="Client\package.manifest" />
     <None Include="packages.config" />
-    <None Include="Client\assets\fonts\fontawesome-webfont.eot" />
-    <None Include="Client\assets\fonts\fontawesome-webfont.ttf" />
-    <None Include="Client\assets\fonts\fontawesome-webfont.woff" />
-    <None Include="Client\assets\fonts\fontawesome-webfont.woff2" />
-    <None Include="Client\assets\fonts\glyphicons-halflings-regular.eot" />
-    <None Include="Client\assets\fonts\glyphicons-halflings-regular.ttf" />
-    <None Include="Client\assets\fonts\glyphicons-halflings-regular.woff" />
-    <None Include="Client\assets\fonts\glyphicons-halflings-regular.woff2" />
-    <None Include="Client\assets\fonts\Material-Design-Iconic-Font.eot" />
-    <None Include="Client\assets\fonts\Material-Design-Iconic-Font.ttf" />
-    <None Include="Client\assets\fonts\Material-Design-Iconic-Font.woff" />
-    <None Include="Client\assets\fonts\Roboto-Black.eot" />
-    <None Include="Client\assets\fonts\Roboto-Black.ttf" />
-    <None Include="Client\assets\fonts\Roboto-Black.woff" />
-    <None Include="Client\assets\fonts\Roboto-Black.woff2" />
-    <None Include="Client\assets\fonts\Roboto-BlackItalic.eot" />
-    <None Include="Client\assets\fonts\Roboto-BlackItalic.ttf" />
-    <None Include="Client\assets\fonts\Roboto-BlackItalic.woff" />
-    <None Include="Client\assets\fonts\Roboto-BlackItalic.woff2" />
-    <None Include="Client\assets\fonts\Roboto-Bold.eot" />
-    <None Include="Client\assets\fonts\Roboto-Bold.ttf" />
-    <None Include="Client\assets\fonts\Roboto-Bold.woff" />
-    <None Include="Client\assets\fonts\Roboto-Bold.woff2" />
-    <None Include="Client\assets\fonts\Roboto-BoldItalic.eot" />
-    <None Include="Client\assets\fonts\Roboto-BoldItalic.ttf" />
-    <None Include="Client\assets\fonts\Roboto-BoldItalic.woff" />
-    <None Include="Client\assets\fonts\Roboto-BoldItalic.woff2" />
-    <None Include="Client\assets\fonts\Roboto-Light.eot" />
-    <None Include="Client\assets\fonts\Roboto-Light.ttf" />
-    <None Include="Client\assets\fonts\Roboto-Light.woff" />
-    <None Include="Client\assets\fonts\Roboto-Light.woff2" />
-    <None Include="Client\assets\fonts\Roboto-LightItalic.eot" />
-    <None Include="Client\assets\fonts\Roboto-LightItalic.ttf" />
-    <None Include="Client\assets\fonts\Roboto-LightItalic.woff" />
-    <None Include="Client\assets\fonts\Roboto-LightItalic.woff2" />
-    <None Include="Client\assets\fonts\Roboto-Medium.eot" />
-    <None Include="Client\assets\fonts\Roboto-Medium.ttf" />
-    <None Include="Client\assets\fonts\Roboto-Medium.woff" />
-    <None Include="Client\assets\fonts\Roboto-Medium.woff2" />
-    <None Include="Client\assets\fonts\Roboto-MediumItalic.eot" />
-    <None Include="Client\assets\fonts\Roboto-MediumItalic.ttf" />
-    <None Include="Client\assets\fonts\Roboto-MediumItalic.woff" />
-    <None Include="Client\assets\fonts\Roboto-MediumItalic.woff2" />
-    <None Include="Client\assets\fonts\Roboto-Regular.eot" />
-    <None Include="Client\assets\fonts\Roboto-Regular.ttf" />
-    <None Include="Client\assets\fonts\Roboto-Regular.woff" />
-    <None Include="Client\assets\fonts\Roboto-Regular.woff2" />
-    <None Include="Client\assets\fonts\Roboto-RegularItalic.eot" />
-    <None Include="Client\assets\fonts\Roboto-RegularItalic.ttf" />
-    <None Include="Client\assets\fonts\Roboto-RegularItalic.woff" />
-    <None Include="Client\assets\fonts\Roboto-RegularItalic.woff2" />
-    <None Include="Client\assets\fonts\Roboto-Thin.eot" />
-    <None Include="Client\assets\fonts\Roboto-Thin.ttf" />
-    <None Include="Client\assets\fonts\Roboto-Thin.woff" />
-    <None Include="Client\assets\fonts\Roboto-Thin.woff2" />
-    <None Include="Client\assets\fonts\Roboto-ThinItalic.eot" />
-    <None Include="Client\assets\fonts\Roboto-ThinItalic.ttf" />
-    <None Include="Client\assets\fonts\Roboto-ThinItalic.woff" />
-    <None Include="Client\assets\fonts\Roboto-ThinItalic.woff2" />
-    <None Include="Client\assets\fonts\weathericons-regular-webfont.eot" />
-    <None Include="Client\assets\fonts\weathericons-regular-webfont.ttf" />
-    <None Include="Client\assets\fonts\weathericons-regular-webfont.woff" />
-    <None Include="Client\package.manifest" />
     <None Include="Core\app.config" />
     <None Include="Core\packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Client\app.html" />
+    <Content Include="Client\assets\scripts\app.js" />
+    <Content Include="Client\assets\scripts\vendors.min.js" />
+    <Content Include="Client\assets\styles\styles.min.css" />
+    <Content Include="Client\assets\styles\vendors.min.css" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
