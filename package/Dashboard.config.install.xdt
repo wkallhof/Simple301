@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dashBoard xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-  <section alias="StartupDeveloperDashboardSection" xdt:Locator="Match(alias)">
+  <section alias="StartupDashboardSection" xdt:Locator="Match(alias)">
     <areas>
-      <area>developer</area>
+      <area>content</area>
     </areas>
-    <tab caption="Trace Logs" xdt:Transform="Insert">
+    <tab caption="Manage Redirects" xdt:Transform="Insert">
       <control>
-        ../App_Plugins/uLogs/app.html
+        ../App_Plugins/Simple301/app.html
       </control>
     </tab>
   </section>
