@@ -21,7 +21,7 @@ namespace Simple301.Core
         [HttpGet]
         public IEnumerable<Redirect> GetAll()
         {
-            return RedirectRepository.GetAll();
+            return RedirectRepository.GetAllRedirects();
         }
 
         /// <summary>

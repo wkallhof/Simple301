@@ -11,9 +11,12 @@ namespace Simple301.Core
     {
         public bool TryFindContent(PublishedContentRequest request)
         {
-            //Look for a redirect that matches the path + query
-            var path = request.Uri.PathAndQuery;
-            var matchedRedirect = RedirectRepository.GetAll().FirstOrDefault(x => x.OldUrl.Equals(path));
+            //Get the requested URL path + query
+            var path = request.Uri.PathAndQuery.ToLower();
+
+            //Check the table
+            var redirectLookupTable = RedirectRepository.GetLookupTable();
+            var matchedRedirect = redirectLookupTable.ContainsKey(path) ? redirectLookupTable[path] : null;
             if (matchedRedirect == null) return false;
 
             //Found one, set the 301 redirect on the request and return

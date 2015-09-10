@@ -14,7 +14,7 @@ namespace Simple301.Core
     /// </summary>
     public static class RedirectRepository
     {
-        private static IEnumerable<Redirect> _redirects;
+        private static Dictionary<string,Redirect> _redirects;
 
         static RedirectRepository()
         {
@@ -25,7 +25,16 @@ namespace Simple301.Core
         /// Get all redirects from the repositry
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        public static IEnumerable<Redirect> GetAll()
+        public static IEnumerable<Redirect> GetAllRedirects()
+        {
+            return _redirects.Select(x => x.Value);
+        }
+
+        /// <summary>
+        /// Get the lookup table for quick lookups
+        /// </summary>
+        /// <returns>Dictionary of OldUrl => Redirect </returns>
+        public static Dictionary<string, Redirect> GetLookupTable()
         {
             return _redirects;
         }
@@ -41,7 +50,12 @@ namespace Simple301.Core
         {
             if (!oldUrl.IsSet()) throw new ArgumentNullException("oldUrl");
             if (!newUrl.IsSet()) throw new ArgumentNullException("newUrl");
-            if (_redirects.Any(x => x.OldUrl.Equals(oldUrl))) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
+
+            //Ensure starting slash
+            oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+            newUrl = newUrl.EnsurePrefix("/").ToLower();
+
+            if (_redirects.ContainsKey(oldUrl)) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
 
             //Add redirect to DB
             var db = ApplicationContext.Current.DatabaseContext.Database;
@@ -55,7 +69,7 @@ namespace Simple301.Core
 
             //Fetch the added redirect to put into the in-memory collection
             var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
-            _redirects.ToList().Add(newRedirect);
+            _redirects[newRedirect.OldUrl] = newRedirect;
 
             //return new redirect
             return newRedirect;
@@ -71,12 +85,21 @@ namespace Simple301.Core
             if (redirect == null) throw new ArgumentNullException("redirect");
             if (!redirect.OldUrl.IsSet()) throw new ArgumentNullException("redirect.OldUrl");
             if (!redirect.NewUrl.IsSet()) throw new ArgumentNullException("redirect.NewUrl");
-            if (_redirects.Any(x => x.OldUrl.Equals(redirect.OldUrl) && x.Id != redirect.Id)) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
+
+            //Ensure starting slash
+            redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
+            redirect.NewUrl = redirect.NewUrl.EnsurePrefix("/").ToLower();
+
+            var existingRedirect = _redirects.ContainsKey(redirect.OldUrl) ? _redirects[redirect.OldUrl] : null;
+            if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
 
             //get DB Context, set update time, and persist
             var db = ApplicationContext.Current.DatabaseContext.Database;
             redirect.LastUpdated = DateTime.Now.ToUniversalTime();
             db.Update(redirect);
+
+            //Update in-memory list
+            _redirects[redirect.OldUrl] = redirect;
 
             //return updated redirect
             return redirect;
@@ -89,23 +112,26 @@ namespace Simple301.Core
         public static void DeleteRedirect(int id)
         {
             //Look for the redirect that has a matching Id
-            var item = _redirects.FirstOrDefault(x => x.Id.Equals(id));
+            var item = _redirects.Values.FirstOrDefault(x => x.Id.Equals(id));
             if (item == null) throw new ArgumentException("No redirect with an Id that matches " + id);
 
             //Get database context and delete
             var db = ApplicationContext.Current.DatabaseContext.Database;
             db.Delete(item);
+
+            //Update in-memory list
+            _redirects.Remove(item.OldUrl);
         }
 
         /// <summary>
         /// Fetches all redirects from the database
         /// </summary>
         /// <returns>Collection of redirects</returns>
-        private static IEnumerable<Redirect> FetchRedirectsFromDb()
+        private static Dictionary<string,Redirect> FetchRedirectsFromDb()
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var redirects = db.Query<Redirect>("SELECT * FROM Redirects");
-            return redirects ?? new List<Redirect>();
+            return redirects != null ? redirects.ToDictionary(x => x.OldUrl) : new Dictionary<string, Redirect>();
         }
 
         /// <summary>
