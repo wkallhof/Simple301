@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Simple301</id>
-    <version>1.0.1-RC</version>
+    <version>1.0.2</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
     <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
@@ -11,10 +11,7 @@
     <description>Umbraco 301 Redirect Manager for the Umbraco 7.3 Back-Office</description>
     <copyright>Copyright 2015</copyright>
     <tags>umbraco</tags>
-    <releaseNotes>Updating to use hash table for quicker lookup. Doing more url safety checking.</releaseNotes>
-    <dependencies>
-      <dependency id="UmbracoCms" version="7.3.0-RC" />
-    </dependencies>
+    <releaseNotes>Updating to reference the latest UmbracoCms.Core 7.3.1</releaseNotes>
   </metadata>
   <files>
   	<file src="..\source\Simple301\bin\release\Simple301.dll" target="lib\net452" />
