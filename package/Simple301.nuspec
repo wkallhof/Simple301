@@ -2,10 +2,11 @@
 <package >
   <metadata>
     <id>Simple301</id>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
     <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
+    <iconUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/package/simple301Logo.png</iconUrl>
     <projectUrl>https://github.com/wkallhof/Simple301</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Umbraco 301 Redirect Manager for the Umbraco 7.3 Back-Office</description>
