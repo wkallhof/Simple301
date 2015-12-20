@@ -10,6 +10,30 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     //Property to display error messages
     $scope.errorMessage = '';
 
+    //App state
+    $scope.initialLoad = false;
+    $scope.$tab = $('a:contains("Manage Redirects")');
+
+    /*
+    * Initial load function to set loaded state
+    */
+    $scope.init = function () {
+        if (!$scope.initialLoad) {
+            //Get the available log dates to view log entries for.
+            $scope.fetchRedirects()
+                .then(function () { $scope.initialLoad = true; });
+        }
+    }
+
+    //If we have a tab, set the click handler so we only
+    //load the content on tab click. 
+    if ($scope.$tab && $scope.$tab.length > 0) {
+        $scope.$tab.on('click', $scope.init.bind(this));
+    }
+    else {
+        $scope.init();
+    }
+
     /*
     * Refresh the table. Uses $scope.redirects for data
     */
@@ -25,14 +49,13 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Handles fetching all redirects from the server.
     */
     $scope.fetchRedirects = function () {
-        Simple301Api.getAll().then($scope.onRecieveAllRedirectsResponse.bind(this));
+        return Simple301Api.getAll().then($scope.onRecieveAllRedirectsResponse.bind(this));
     };
 
     /*
     * Response handler for requesting all redirects
     */
-    $scope.onRecieveAllRedirectsResponse = function(response)
-    {
+    $scope.onRecieveAllRedirectsResponse = function (response) {
         //Somethign went wrong. Error out
         if (!response || !response.data) {
             $scope.errorMessage = "Error fetching redirects from server";
@@ -57,14 +80,13 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Handles the Add Redirect response from the API. Checks
     * for errors and updates table.
     */
-    $scope.onAddRedirectResponse = function(response)
-    {
+    $scope.onAddRedirectResponse = function (response) {
         //Check for error
         if (!response || !response.data) {
             $scope.errorMessage = "Error sending request to add a new redirect.";
             return;
         }
-        
+
         //Handle success from API
         if (response.data.Success) {
             $scope.errorMessage = '';
@@ -80,8 +102,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Handles sending a redirect to the API to as a reference for
     * updating the redirects collection server side.
     */
-    $scope.updateRedirect = function(redirect)
-    {
+    $scope.updateRedirect = function (redirect) {
         Simple301Api.update(redirect).then($scope.onUpdateRedirectResponse.bind(this, redirect));
     }
 
@@ -89,8 +110,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Handler for receiving a response from the Update Redirect API call
     * Will update the table with the returned, updated redirect
     */
-    $scope.onUpdateRedirectResponse = function(redirect, response)
-    {
+    $scope.onUpdateRedirectResponse = function (redirect, response) {
         //Check for error
         if (!response || !response.data) {
             $scope.errorMessage = "Error sending request to update a redirect.";
@@ -121,8 +141,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Handles the DeleteRedirect response from the API. If successful,
     * remove the redirect from the table.
     */
-    $scope.onDeleteRedirectResponse = function(redirect, response)
-    {
+    $scope.onDeleteRedirectResponse = function (redirect, response) {
         //Check for error
         if (!response || !response.data) {
             $scope.errorMessage = "Error sending request to delete a redirect.";
@@ -148,8 +167,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     /*
     * Clears the global error message
     */
-    $scope.clearErrorMessage = function()
-    {
+    $scope.clearErrorMessage = function () {
         $scope.errorMessage = '';
     }
 
@@ -193,14 +211,10 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
             var pagedResults = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
             //Cheat and add a blank redirect so the user can add a new redirect right from the table
-            pagedResults.push({ Id:"-1", OldUrl: "", NewUrl: "", Notes: "", LastUpdated: "", $edit:true });
+            pagedResults.push({ Id: "-1", OldUrl: "", NewUrl: "", Notes: "", LastUpdated: "", $edit: true });
             $defer.resolve(pagedResults);
         }
     })
-
-    //TODO: Wait until user clicks tab to fetch redirects
-    $scope.fetchRedirects();
-
 });
 
 /*
@@ -221,11 +235,11 @@ angular.module("umbraco.resources").factory("Simple301Api", function ($http) {
         },
         //Send request to update an existing redirect
         update: function (redirect) {
-            return $http.post("backoffice/Simple301/RedirectApi/Update", JSON.stringify({ redirect : redirect }));
+            return $http.post("backoffice/Simple301/RedirectApi/Update", JSON.stringify({ redirect: redirect }));
         },
         //Remove / Delete an existing redirect
         remove: function (id) {
-            return $http.delete("backoffice/Simple301/RedirectApi/Delete/"+id);
+            return $http.delete("backoffice/Simple301/RedirectApi/Delete/" + id);
         }
     };
 });
