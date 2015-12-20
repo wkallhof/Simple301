@@ -9,30 +9,8 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
 
     //Property to display error messages
     $scope.errorMessage = '';
-
     //App state
     $scope.initialLoad = false;
-    $scope.$tab = $('a:contains("Manage Redirects")');
-
-    /*
-    * Initial load function to set loaded state
-    */
-    $scope.initLoad = function () {
-        if (!$scope.initialLoad) {
-            //Get the available log dates to view log entries for.
-            $scope.fetchRedirects()
-                .then(function () { $scope.initialLoad = true; });
-        }
-    }
-
-    //If we have a tab, set the click handler so we only
-    //load the content on tab click. 
-    if ($scope.$tab && $scope.$tab.length > 0) {
-        $scope.$tab.on('click', $scope.initLoad.bind(this));
-    }
-    else {
-        $scope.initLoad();
-    }
 
     /*
     * Refresh the table. Uses $scope.redirects for data
@@ -215,6 +193,31 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
             $defer.resolve(pagedResults);
         }
     })
+
+    /*
+    * Initial load function to set loaded state
+    */
+    $scope.initLoad = function () {
+        if (!$scope.initialLoad) {
+            //Get the available log dates to view log entries for.
+            $scope.fetchRedirects()
+                .then(function () { $scope.initialLoad = true; });
+        }
+    }
+
+    $(function () {
+        $scope.$tab = $('a:contains("Manage Redirects")');
+
+        //If we have a tab, set the click handler so we only
+        //load the content on tab click. 
+        if ($scope.$tab && $scope.$tab.length > 0) {
+            $scope.$tab.on('click', $scope.initLoad.bind(this));
+        }
+        else {
+            $scope.initLoad();
+        }
+    });
+
 });
 
 /*
