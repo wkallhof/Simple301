@@ -17,7 +17,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     /*
     * Initial load function to set loaded state
     */
-    $scope.init = function () {
+    $scope.initLoad = function () {
         if (!$scope.initialLoad) {
             //Get the available log dates to view log entries for.
             $scope.fetchRedirects()
@@ -28,10 +28,10 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     //If we have a tab, set the click handler so we only
     //load the content on tab click. 
     if ($scope.$tab && $scope.$tab.length > 0) {
-        $scope.$tab.on('click', $scope.init.bind(this));
+        $scope.$tab.on('click', $scope.initLoad.bind(this));
     }
     else {
-        $scope.init();
+        $scope.initLoad();
     }
 
     /*
