@@ -53,8 +53,13 @@ namespace Simple301.Core
 
             //Ensure starting slash
             oldUrl = oldUrl.EnsurePrefix("/").ToLower();
-            newUrl = newUrl.EnsurePrefix("/").ToLower();
 
+            //Don't add forward slash if external redirect
+            if(!(IsAbsoluteUrl(newUrl)))
+                newUrl = newUrl.EnsurePrefix("/").ToLower();
+            else            
+                newUrl = newUrl.ToLower();
+            
             if (_redirects.ContainsKey(oldUrl)) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
 
             //Add redirect to DB
@@ -88,7 +93,13 @@ namespace Simple301.Core
 
             //Ensure starting slash
             redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
-            redirect.NewUrl = redirect.NewUrl.EnsurePrefix("/").ToLower();
+
+            //Don't add forward slash if external redirect
+            if (!(IsAbsoluteUrl(redirect.NewUrl)))
+                redirect.NewUrl = redirect.NewUrl.EnsurePrefix("/").ToLower();
+            else
+                redirect.NewUrl = redirect.NewUrl.ToLower();
+            
 
             var existingRedirect = _redirects.ContainsKey(redirect.OldUrl) ? _redirects[redirect.OldUrl] : null;
             if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
@@ -143,6 +154,23 @@ namespace Simple301.Core
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             return db.FirstOrDefault<Redirect>("SELECT * FROM Redirects WHERE Id=@0", id);
+        }
+        
+        /// <summary>
+        /// Checks if the URL is absolute or not
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        private static bool IsAbsoluteUrl(string url)
+        {
+            if (url.StartsWith("http://") || url.StartsWith("https://"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
