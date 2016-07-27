@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Simple301</id>
-    <version>1.0.6</version>
+    <version>1.0.7</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
     <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
@@ -12,7 +12,7 @@
     <description>Umbraco 301 Redirect Manager for the Umbraco 7.3 Back-Office</description>
     <copyright>Copyright 2015</copyright>
     <tags>umbraco</tags>
-    <releaseNotes>Updating jQuery on load event</releaseNotes>
+    <releaseNotes>Updating to include external redirects and loop detection</releaseNotes>
   </metadata>
   <files>
     <file src="..\source\Simple301\bin\release\net452\Simple301.dll" target="lib\net452" />
