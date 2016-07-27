@@ -53,9 +53,14 @@ namespace Simple301.Core
 
             //Ensure starting slash
             oldUrl = oldUrl.EnsurePrefix("/").ToLower();
-            newUrl = newUrl.EnsurePrefix("/").ToLower();
+
+            // Allow external redirects and ensure slash if not absolute
+            newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
+                newUrl.ToLower() : 
+                newUrl.EnsurePrefix("/").ToLower();
 
             if (_redirects.ContainsKey(oldUrl)) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
+            if (DetectLoop(oldUrl, newUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //Add redirect to DB
             var db = ApplicationContext.Current.DatabaseContext.Database;
@@ -88,10 +93,15 @@ namespace Simple301.Core
 
             //Ensure starting slash
             redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
-            redirect.NewUrl = redirect.NewUrl.EnsurePrefix("/").ToLower();
+
+            // Allow external redirects and ensure slash if not absolute
+            redirect.NewUrl = Uri.IsWellFormedUriString(redirect.NewUrl, UriKind.Absolute) ?
+                redirect.NewUrl.ToLower() :
+                redirect.NewUrl.EnsurePrefix("/").ToLower();
 
             var existingRedirect = _redirects.ContainsKey(redirect.OldUrl) ? _redirects[redirect.OldUrl] : null;
             if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
+            if (DetectLoop(redirect.OldUrl, redirect.NewUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //get DB Context, set update time, and persist
             var db = ApplicationContext.Current.DatabaseContext.Database;
@@ -143,6 +153,43 @@ namespace Simple301.Core
         {
             var db = ApplicationContext.Current.DatabaseContext.Database;
             return db.FirstOrDefault<Redirect>("SELECT * FROM Redirects WHERE Id=@0", id);
+        }
+
+        /// <summary>
+        /// Detects a loop in the redirects list given the new redirect.
+        /// Uses Floyd's cycle-finding algorithm.
+        /// </summary>
+        /// <param name="oldUrl">Old URL for new redirect</param>
+        /// <param name="newUrl">New URL for new redirect</param>
+        /// <returns>True if loop detected, false if no loop detected</returns>
+        private static bool DetectLoop(string oldUrl, string newUrl)
+        {
+            // quick check for any links to this new redirect
+            if (!_redirects.ContainsKey(newUrl) && !_redirects.Any(x => x.Value.NewUrl.Equals(oldUrl))) return false;
+
+            // clone redirect list
+            var linkedList = _redirects.ToDictionary(entry => entry.Key, entry => entry.Value);
+            var redirect = new Redirect() { OldUrl = oldUrl, NewUrl = newUrl };
+
+            // add new redirect to cloned list for traversing
+            if (!linkedList.ContainsKey(oldUrl))
+                linkedList.Add(oldUrl, redirect);
+
+            // Use Floyd's cycle finding algorithm to detect loops in a linked list
+            var slowP = redirect;
+            var fastP = redirect;
+
+            while (slowP != null && fastP != null && linkedList.ContainsKey(fastP.NewUrl))
+            {
+                slowP = linkedList[slowP.NewUrl];
+                fastP = linkedList[linkedList[fastP.NewUrl].NewUrl];
+
+                if (slowP == fastP)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }
