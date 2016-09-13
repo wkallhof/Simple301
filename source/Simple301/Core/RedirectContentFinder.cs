@@ -15,8 +15,7 @@ namespace Simple301.Core
             var path = request.Uri.PathAndQuery.ToLower();
 
             //Check the table
-            var redirectLookupTable = RedirectRepository.GetLookupTable();
-            var matchedRedirect = redirectLookupTable.ContainsKey(path) ? redirectLookupTable[path] : null;
+            var matchedRedirect = RedirectRepository.FindRedirect(path);
             if (matchedRedirect == null) return false;
 
             //Found one, set the 301 redirect on the request and return

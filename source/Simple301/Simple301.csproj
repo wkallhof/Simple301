@@ -282,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Extensions\StringExtensions.cs" />
+    <Compile Include="Core\Migrations\AddRegexToRedirectsTable.cs" />
     <Compile Include="Core\Models\AddRedirectRequest.cs" />
     <Compile Include="Core\Models\AddRedirectResponse.cs" />
     <Compile Include="Core\Models\DeleteRedirectResponse.cs" />

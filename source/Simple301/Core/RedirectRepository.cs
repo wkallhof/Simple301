@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core;
 using Simple301.Core.Extensions;
+using System.Text.RegularExpressions;
 
 namespace Simple301.Core
 {
@@ -111,9 +112,12 @@ namespace Simple301.Core
             redirect.LastUpdated = DateTime.Now.ToUniversalTime();
             db.Update(redirect);
 
-            //Update in-memory list
-            //if(existingRedirect != null && redirect.OldUrl != existingRedirect.OldUrl)
+            //if we are changing the oldUrl property, let's move things around
+            var oldRedirect = _redirects.FirstOrDefault(x => x.Value.Id.Equals(redirect.Id));
+            if (oldRedirect.Value != null && redirect.OldUrl != oldRedirect.Value.OldUrl)
+                _redirects.Remove(oldRedirect.Value.OldUrl);
 
+            //Update in-memory list
             _redirects[redirect.OldUrl] = redirect;
 
             //return updated redirect
@@ -136,6 +140,26 @@ namespace Simple301.Core
 
             //Update in-memory list
             _redirects.Remove(item.OldUrl);
+        }
+
+        /// <summary>
+        /// Handles finding a redirect based on the oldUrl
+        /// </summary>
+        /// <param name="oldUrl">Url to search for</param>
+        /// <returns>Matched Redirect</returns>
+        public static Redirect FindRedirect(string oldUrl)
+        {
+            var matchedRedirect = _redirects.ContainsKey(oldUrl) ? _redirects[oldUrl] : null;
+            if (matchedRedirect != null) return matchedRedirect;
+
+            var regexRedirects = _redirects.Where(x => x.Value.IsRegex);
+
+            foreach(var regexRedirect in regexRedirects)
+            {
+                if (Regex.IsMatch(oldUrl,regexRedirect.Key)) return regexRedirect.Value;
+            }
+
+            return null;
         }
 
         /// <summary>
