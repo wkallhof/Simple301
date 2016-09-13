@@ -11,7 +11,7 @@
                         Simple 301 - Redirect Manager
                     </h1>
                     <p class="lead">
-                        Add, Update, and Delete 301 redirects in the table below. 
+                        Add, Update, and Delete 301 redirects in the table below.
                     </p>
                 </div>
 
@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="table-search">
-                                <input type="text" ng-model="tableParams.filter()['Search']" class="form-control" placeholder="Search redirects" autofocus no-dirty-check/>
+                                <input type="text" ng-model="tableParams.filter()['Search']" class="form-control" placeholder="Search redirects" autofocus no-dirty-check />
                             </div>
                         </div>
                     </div>
@@ -45,20 +45,21 @@
                         <table ng-table="tableParams" template-header="header" template-pagination="pager" class="table table-full table-full-small">
                             <tbody>
                                 <tr ng-repeat="item in $data">
-                                    <td data-title="'Regex'" sortable="'Regex'">
+                                    <td data-title="'Regex'">
                                         <input class="form-control" type="checkbox" ng-model="item.IsRegex" ng-disabled="!item.$edit" no-dirty-check />
                                     </td>
                                     <td data-title="'Old Url'" sortable="'OldUrl'">
-                                        <a ng-if="!item.$edit" href="{{item.OldUrl}}" target="_blank">{{item.OldUrl}}</a>
-                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.OldUrl" placeholder="Old Url" no-dirty-check/></div>
+                                        <span ng-if="!item.$edit && item.IsRegex">{{item.OldUrl}}</span>
+                                        <a ng-if="!item.$edit && !item.IsRegex" href="{{item.OldUrl}}" target="_blank">{{item.OldUrl}}</a>
+                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.OldUrl" placeholder="Old Url" no-dirty-check /></div>
                                     </td>
                                     <td data-title="'New Url'" sortable="'NewUrl'">
                                         <a ng-if="!item.$edit" href="{{item.NewUrl}}" target="_blank">{{item.NewUrl}}</a>
-                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.NewUrl" placeholder="New Url" no-dirty-check/></div>
+                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.NewUrl" placeholder="New Url" no-dirty-check /></div>
                                     </td>
                                     <td data-title="'Notes'" sortable="'Notes'">
                                         <span ng-if="!item.$edit">{{item.Notes}}</span>
-                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.Notes" placeholder="Notes" no-dirty-check/></div>
+                                        <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.Notes" placeholder="Notes" no-dirty-check /></div>
                                     </td>
                                     <td data-title="'Last Updated'" sortable="'LastUpdated'">
                                         {{ item.LastUpdated | date:'M/d/yy h:mm a' }}
