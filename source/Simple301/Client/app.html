@@ -45,6 +45,9 @@
                         <table ng-table="tableParams" template-header="header" template-pagination="pager" class="table table-full table-full-small">
                             <tbody>
                                 <tr ng-repeat="item in $data">
+                                    <td data-title="'Regex'" sortable="'Regex'">
+                                        <input class="form-control" type="checkbox" ng-model="item.IsRegex" ng-disabled="!item.$edit" no-dirty-check />
+                                    </td>
                                     <td data-title="'Old Url'" sortable="'OldUrl'">
                                         <a ng-if="!item.$edit" href="{{item.OldUrl}}" target="_blank">{{item.OldUrl}}</a>
                                         <div ng-if="item.$edit"><input class="form-control" type="text" ng-model="item.OldUrl" placeholder="Old Url" no-dirty-check/></div>

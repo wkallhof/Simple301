@@ -50,7 +50,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * Sends request off to API.
     */
     $scope.addRedirect = function (redirect) {
-        Simple301Api.add(redirect.OldUrl, redirect.NewUrl, redirect.Notes)
+        Simple301Api.add(redirect.IsRegex, redirect.OldUrl, redirect.NewUrl, redirect.Notes)
             .then($scope.onAddRedirectResponse.bind(this));
     };
 
@@ -189,7 +189,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
             var pagedResults = orderedData.slice((params.page() - 1) * params.count(), params.page() * params.count());
 
             //Cheat and add a blank redirect so the user can add a new redirect right from the table
-            pagedResults.push({ Id: "-1", OldUrl: "", NewUrl: "", Notes: "", LastUpdated: "", $edit: true });
+            pagedResults.push({ Id: "-1", IsRegex: false, OldUrl: "", NewUrl: "", Notes: "", LastUpdated: "", $edit: true });
             $defer.resolve(pagedResults);
         }
     })
@@ -233,8 +233,8 @@ angular.module("umbraco.resources").factory("Simple301Api", function ($http) {
             return $http.get("backoffice/Simple301/RedirectApi/GetAll");
         },
         //Send data to add a new redirect
-        add: function (oldUrl, newUrl, notes) {
-            return $http.post("backoffice/Simple301/RedirectApi/Add", JSON.stringify({ oldUrl: oldUrl, newUrl: newUrl, notes: notes }));
+        add: function (isRegex, oldUrl, newUrl, notes) {
+            return $http.post("backoffice/Simple301/RedirectApi/Add", JSON.stringify({ isRegex, oldUrl: oldUrl, newUrl: newUrl, notes: notes }));
         },
         //Send request to update an existing redirect
         update: function (redirect) {

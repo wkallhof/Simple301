@@ -46,13 +46,14 @@ namespace Simple301.Core
         /// <param name="newUrl">New Url to redirect to</param>
         /// <param name="notes">Any associated notes with this redirect</param>
         /// <returns>New redirect from DB if successful</returns>
-        public static Redirect AddRedirect(string oldUrl, string newUrl, string notes)
+        public static Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string notes)
         {
             if (!oldUrl.IsSet()) throw new ArgumentNullException("oldUrl");
             if (!newUrl.IsSet()) throw new ArgumentNullException("newUrl");
 
-            //Ensure starting slash
-            oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+            //Ensure starting slash if not regex
+            if(!isRegex)
+                oldUrl = oldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
@@ -60,12 +61,13 @@ namespace Simple301.Core
                 newUrl.EnsurePrefix("/").ToLower();
 
             if (_redirects.ContainsKey(oldUrl)) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
-            if (DetectLoop(oldUrl, newUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
+            if (!isRegex && DetectLoop(oldUrl, newUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //Add redirect to DB
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var idObj = db.Insert(new Redirect()
             {
+                IsRegex = isRegex,
                 OldUrl = oldUrl,
                 NewUrl = newUrl,
                 LastUpdated = DateTime.Now.ToUniversalTime(),
@@ -92,7 +94,8 @@ namespace Simple301.Core
             if (!redirect.NewUrl.IsSet()) throw new ArgumentNullException("redirect.NewUrl");
 
             //Ensure starting slash
-            redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
+            if(!redirect.IsRegex)
+                redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
             redirect.NewUrl = Uri.IsWellFormedUriString(redirect.NewUrl, UriKind.Absolute) ?
@@ -101,7 +104,7 @@ namespace Simple301.Core
 
             var existingRedirect = _redirects.ContainsKey(redirect.OldUrl) ? _redirects[redirect.OldUrl] : null;
             if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
-            if (DetectLoop(redirect.OldUrl, redirect.NewUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
+            if (!redirect.IsRegex && DetectLoop(redirect.OldUrl, redirect.NewUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //get DB Context, set update time, and persist
             var db = ApplicationContext.Current.DatabaseContext.Database;
@@ -109,6 +112,8 @@ namespace Simple301.Core
             db.Update(redirect);
 
             //Update in-memory list
+            //if(existingRedirect != null && redirect.OldUrl != existingRedirect.OldUrl)
+
             _redirects[redirect.OldUrl] = redirect;
 
             //return updated redirect

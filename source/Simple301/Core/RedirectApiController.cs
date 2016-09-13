@@ -37,7 +37,7 @@ namespace Simple301.Core
 
             try
             {
-                var redirect = RedirectRepository.AddRedirect(request.OldUrl, request.NewUrl, request.Notes);
+                var redirect = RedirectRepository.AddRedirect(request.IsRegex, request.OldUrl, request.NewUrl, request.Notes);
                 return new AddRedirectResponse() { Success = true, NewRedirect = redirect };
             }
             catch(Exception e)
