@@ -79,7 +79,7 @@ namespace Simple301.Core
             return new ImportRedirectsResponse
             {
                 Success = true,
-                Message = $"{successfulRedirects.Count} records imported.  Failed importing {failedRedirects.Count} records.",
+                Message = $"{successfulRedirects.Count} records imported.  Failed to import {failedRedirects.Count} records.",
                 FailedRedirects = failedRedirects
             };
         }
@@ -95,7 +95,7 @@ namespace Simple301.Core
             if (oldUrl.ToLower().Replace(" ", "") == "oldurl" || newUrl.ToLower().Replace(" ", "") == "newurl")
             {
                 // Skip header row
-                return new AddRedirectResponse { Success = false, Message = "Skipping header row from CSV file" };
+                return new AddRedirectResponse { Success = false, Message = "Skipped header row from CSV file" };
             }
 
             return RedirectRepository.AddRedirectFromCsv(oldUrl, newUrl, notes);
