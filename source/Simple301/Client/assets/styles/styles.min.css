@@ -11033,3 +11033,17 @@
     color: #212121;
     border-radius: 3px
 }
+
+ /* File Upload */
+ #Simple301Redirect .form-upload {
+     margin-bottom: 40px;
+ }
+
+ #Simple301Redirect .input-textbox-upload {
+     width:40%;
+     margin-bottom:0 !important;
+ }
+
+ #Simple301Redirect .import-feedback-placeholder {
+     height: 100px;
+ }
