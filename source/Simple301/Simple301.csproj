@@ -282,6 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Extensions\StringExtensions.cs" />
+    <Compile Include="Core\Migrations\AddRegexToRedirectsTable.cs" />
     <Compile Include="Core\FileUploadApiController.cs" />
     <Compile Include="Core\FileUpload\CustomMultipartFormDataStreamProvider.cs" />
     <Compile Include="Core\Models\AddRedirectRequest.cs" />

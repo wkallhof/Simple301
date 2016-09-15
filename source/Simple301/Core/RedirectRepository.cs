@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Core;
 using Simple301.Core.Extensions;
+using System.Text.RegularExpressions;
 
 namespace Simple301.Core
 {
@@ -56,13 +57,14 @@ namespace Simple301.Core
         /// <param name="newUrl">New Url to redirect to</param>
         /// <param name="notes">Any associated notes with this redirect</param>
         /// <returns>New redirect from DB if successful</returns>
-        public static Redirect AddRedirect(string oldUrl, string newUrl, string notes)
+        public static Redirect AddRedirect(bool isRegex, string oldUrl, string newUrl, string notes)
         {
             if (!oldUrl.IsSet()) throw new ArgumentNullException("oldUrl");
             if (!newUrl.IsSet()) throw new ArgumentNullException("newUrl");
 
-            //Ensure starting slash
-            oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+            //Ensure starting slash if not regex
+            if(!isRegex)
+                oldUrl = oldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
@@ -70,12 +72,13 @@ namespace Simple301.Core
                 newUrl.EnsurePrefix("/").ToLower();
 
             if (_redirects.ContainsKey(oldUrl)) throw new ArgumentException("A redirect for " + oldUrl + " already exists");
-            if (DetectLoop(oldUrl, newUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
+            if (!isRegex && DetectLoop(oldUrl, newUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //Add redirect to DB
             var db = ApplicationContext.Current.DatabaseContext.Database;
             var idObj = db.Insert(new Redirect()
             {
+                IsRegex = isRegex,
                 OldUrl = oldUrl,
                 NewUrl = newUrl,
                 LastUpdated = DateTime.Now.ToUniversalTime(),
@@ -137,7 +140,8 @@ namespace Simple301.Core
             if (!redirect.NewUrl.IsSet()) throw new ArgumentNullException("redirect.NewUrl");
 
             //Ensure starting slash
-            redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
+            if(!redirect.IsRegex)
+                redirect.OldUrl = redirect.OldUrl.EnsurePrefix("/").ToLower();
 
             // Allow external redirects and ensure slash if not absolute
             redirect.NewUrl = Uri.IsWellFormedUriString(redirect.NewUrl, UriKind.Absolute) ?
@@ -146,12 +150,17 @@ namespace Simple301.Core
 
             var existingRedirect = _redirects.ContainsKey(redirect.OldUrl) ? _redirects[redirect.OldUrl] : null;
             if (existingRedirect != null && existingRedirect.Id != redirect.Id) throw new ArgumentException("A redirect for " + redirect.OldUrl + " already exists");
-            if (DetectLoop(redirect.OldUrl, redirect.NewUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
+            if (!redirect.IsRegex && DetectLoop(redirect.OldUrl, redirect.NewUrl)) throw new ApplicationException("Adding this redirect would cause a redirect loop");
 
             //get DB Context, set update time, and persist
             var db = ApplicationContext.Current.DatabaseContext.Database;
             redirect.LastUpdated = DateTime.Now.ToUniversalTime();
             db.Update(redirect);
+
+            //if we are changing the oldUrl property, let's move things around
+            var oldRedirect = _redirects.FirstOrDefault(x => x.Value.Id.Equals(redirect.Id));
+            if (oldRedirect.Value != null && redirect.OldUrl != oldRedirect.Value.OldUrl)
+                _redirects.Remove(oldRedirect.Value.OldUrl);
 
             //Update in-memory list
             _redirects[redirect.OldUrl] = redirect;
@@ -176,6 +185,26 @@ namespace Simple301.Core
 
             //Update in-memory list
             _redirects.Remove(item.OldUrl);
+        }
+
+        /// <summary>
+        /// Handles finding a redirect based on the oldUrl
+        /// </summary>
+        /// <param name="oldUrl">Url to search for</param>
+        /// <returns>Matched Redirect</returns>
+        public static Redirect FindRedirect(string oldUrl)
+        {
+            var matchedRedirect = _redirects.ContainsKey(oldUrl) ? _redirects[oldUrl] : null;
+            if (matchedRedirect != null) return matchedRedirect;
+
+            var regexRedirects = _redirects.Where(x => x.Value.IsRegex);
+
+            foreach(var regexRedirect in regexRedirects)
+            {
+                if (Regex.IsMatch(oldUrl,regexRedirect.Key)) return regexRedirect.Value;
+            }
+
+            return null;
         }
 
         /// <summary>

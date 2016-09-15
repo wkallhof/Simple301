@@ -5,6 +5,8 @@ namespace Simple301.Core.Models
 {
     public class AddRedirectRequest
     {
+        public bool IsRegex { get; set; }
+
         [Required]
         public string OldUrl { get; set; }
         [Required]
