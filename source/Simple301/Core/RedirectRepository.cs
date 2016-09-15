@@ -80,6 +80,37 @@ namespace Simple301.Core
             return newRedirect;
         }
 
+
+        public static AddRedirectResponse AddRedirectFromCsv(string oldUrl, string newUrl, string notes)
+        {
+            if (!oldUrl.IsSet()) return new AddRedirectResponse { Success = false, Message = "Old URL must not be blank" };
+            if (!newUrl.IsSet()) return new AddRedirectResponse { Success = false, Message = "New URL must not be blank" };
+
+            //Ensure starting slash
+            oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+
+            // Allow external redirects and ensure slash if not absolute
+            newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
+                newUrl.ToLower() :
+                newUrl.EnsurePrefix("/").ToLower();
+
+            if (_redirects.ContainsKey(oldUrl)) return new AddRedirectResponse { Success = false, Message = $"A redirect for {oldUrl} already exists" };
+            if (DetectLoop(oldUrl, newUrl)) return new AddRedirectResponse { Success = false, Message = $"Adding this redirect for {oldUrl} would cause a redirect loop" };
+
+            //Add redirect to DB
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var redirect = new Redirect()
+            {
+                OldUrl = oldUrl,
+                NewUrl = newUrl,
+                LastUpdated = DateTime.Now.ToUniversalTime(),
+                Notes = notes
+            };
+            var idObj = db.Insert(redirect);
+
+            return new AddRedirectResponse { NewRedirect = redirect, Success = true };
+        }
+
         /// <summary>
         /// Update a given redirect
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using Simple301.Core.FileUpload;
+using Simple301.Core.Models;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -33,8 +34,70 @@ namespace Simple301.Core
             if (result.FileData.FirstOrDefault() == null)
                 return Request.CreateResponse(HttpStatusCode.InternalServerError, "Error uploading file");
 
-            // Return the full file path to the response
-            return Request.CreateResponse(HttpStatusCode.OK, result.FileData.FirstOrDefault().LocalFileName);
+            // Get full file path from disk
+            var filename = result.FileData.FirstOrDefault().LocalFileName;
+
+            // Process the file for redirects
+            var importResponse = ProcessFile(filename);
+
+            // Return the feedback to the response
+            return Request.CreateResponse(HttpStatusCode.OK, importResponse);
         }
+
+        private ImportRedirectsResponse ProcessFile(string filename)
+        {
+            var failedRedirects = new List<AddRedirectResponse>();
+            var successfulRedirects = new List<AddRedirectResponse>();
+
+            StreamReader sr = new StreamReader(filename);
+
+            do
+            {
+                string row = sr.ReadLine();
+
+                // Attempt to add each redirect in turn, build up an object to return to the response
+                var redirect = AddRedirectFromFile(row);
+                if (redirect.Success)
+                {
+                    successfulRedirects.Add(redirect);
+                }
+                else
+                {
+                    failedRedirects.Add(redirect);
+                }
+
+            } while (sr.Peek() != -1);
+
+            // Tidy Streameader up
+            sr.Close();
+            sr.Dispose();
+
+            // TODO: Rebuild redirects dictionary
+
+            return new ImportRedirectsResponse
+            {
+                Success = true,
+                Message = $"Bulk import complete.  {successfulRedirects.Count} records imported.  Failed importing {failedRedirects.Count} records.  Details below:",
+                FailedRedirects = failedRedirects
+            };
+        }
+
+        private AddRedirectResponse AddRedirectFromFile(string row)
+        {
+            var cells = row.Split(',');
+
+            var oldUrl = cells[0];
+            var newUrl = cells[1];
+            var notes = cells.Length > 2 ? cells[2] : null;
+
+            if (oldUrl == "oldUrl" || newUrl == "newUrl")
+            {
+                // Skip header row
+                return new AddRedirectResponse { Success = false, Message = "Skipping header row from CSV file" };
+            }
+
+            return RedirectRepository.AddRedirectFromCsv(oldUrl, newUrl, notes);
+        }
+
     }
 }
