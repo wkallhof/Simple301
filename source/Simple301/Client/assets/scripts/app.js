@@ -5,12 +5,19 @@
 * -----------------------------------------------------
 * Main Simple 301 controller used to render out the Simple 301 content section
 */
-angular.module("umbraco").controller("Simple301Controller", function ($scope, $filter, Simple301Api, ngTableParams) {
+angular.module("umbraco").controller("Simple301Controller", function ($rootScope, $scope, $filter, Simple301Api, ngTableParams) {
 
     //Property to display error messages
     $scope.errorMessage = '';
     //App state
     $scope.initialLoad = false;
+
+    /*
+    * Event listener to refresh redirects table after bulk upload
+    */
+    $rootScope.$on('reloadTable', function (event) {
+        $scope.fetchRedirects();
+    });
 
     /*
     * Refresh the table. Uses $scope.redirects for data
