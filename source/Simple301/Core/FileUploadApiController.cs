@@ -72,7 +72,11 @@ namespace Simple301.Core
             sr.Close();
             sr.Dispose();
 
-            // TODO: Rebuild redirects dictionary
+            // Rebuild redirects dictionary
+            //if (successfulRedirects.Count > 0)
+            //{
+            //    RedirectRepository.ReloadRedirects();
+            //}
 
             return new ImportRedirectsResponse
             {
@@ -90,7 +94,7 @@ namespace Simple301.Core
             var newUrl = cells[1];
             var notes = cells.Length > 2 ? cells[2] : null;
 
-            if (oldUrl == "oldUrl" || newUrl == "newUrl")
+            if (oldUrl.ToLower().Replace(" ", "") == "oldurl" || newUrl.ToLower().Replace(" ", "") == "newurl")
             {
                 // Skip header row
                 return new AddRedirectResponse { Success = false, Message = "Skipping header row from CSV file" };

@@ -31,6 +31,16 @@ namespace Simple301.Core
         }
 
         /// <summary>
+        /// Get all redirects from the repositry
+        /// </summary>
+        /// <returns>Collection of redirects</returns>
+        //public static IEnumerable<Redirect> ReloadRedirects()
+        //{
+        //    var _redirects = FetchRedirectsFromDb();
+        //    return GetAllRedirects();
+        //}
+
+        /// <summary>
         /// Get the lookup table for quick lookups
         /// </summary>
         /// <returns>Dictionary of OldUrl => Redirect </returns>
@@ -99,16 +109,20 @@ namespace Simple301.Core
 
             //Add redirect to DB
             var db = ApplicationContext.Current.DatabaseContext.Database;
-            var redirect = new Redirect()
+            var newRedirect = new Redirect()
             {
                 OldUrl = oldUrl,
                 NewUrl = newUrl,
                 LastUpdated = DateTime.Now.ToUniversalTime(),
                 Notes = notes
             };
-            var idObj = db.Insert(redirect);
+            var idObj = db.Insert(newRedirect);
+            newRedirect.Id = Convert.ToInt32(idObj);
 
-            return new AddRedirectResponse { NewRedirect = redirect, Success = true };
+            // Update the in-memory redirects collection  (NB Not fetching it again from the DB here in an attempt to optimise the bulk import process)
+            _redirects[newRedirect.OldUrl] = newRedirect;
+
+            return new AddRedirectResponse { NewRedirect = newRedirect, Success = true };
         }
 
         /// <summary>

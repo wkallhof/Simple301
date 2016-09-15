@@ -282,7 +282,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\Extensions\StringExtensions.cs" />
-    <Compile Include="Core\FileUpload ApiController.cs" />
+    <Compile Include="Core\FileUploadApiController.cs" />
     <Compile Include="Core\FileUpload\CustomMultipartFormDataStreamProvider.cs" />
     <Compile Include="Core\Models\AddRedirectRequest.cs" />
     <Compile Include="Core\Models\AddRedirectResponse.cs" />
