@@ -13,8 +13,6 @@ using Umbraco.Web.WebApi;
 
 namespace Simple301.Core
 {
-    // If you want this endpoint to only be accessible when the user is logged in, 
-    // then use UmbracoAuthorizedApiController instead of UmbracoApiController
     [PluginController("Simple301")]
     public class FileUploadApiController : UmbracoAuthorizedApiController
     {
@@ -81,7 +79,7 @@ namespace Simple301.Core
             return new ImportRedirectsResponse
             {
                 Success = true,
-                Message = $"Bulk import complete.  {successfulRedirects.Count} records imported.  Failed importing {failedRedirects.Count} records.  Details below:",
+                Message = $"{successfulRedirects.Count} records imported.  Failed importing {failedRedirects.Count} records.",
                 FailedRedirects = failedRedirects
             };
         }
