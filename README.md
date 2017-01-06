@@ -3,7 +3,7 @@
 ### 301 Redirect Manager for Umbraco ###
 [![Build status](https://img.shields.io/appveyor/ci/wkallhof/simple301/master.svg)](https://ci.appveyor.com/project/wkallhof/simple301/branch/master)
 
-Simple 301 Redirect Manager is a simple to use, yet extensible, Umbraco 7.3 Back-Office package that allows you to manage your 301 redirects directly in Umbraco. Includes a simple and intuitive refinement system where you can search for specific text within the URLs or notes defined for the redirect. 
+Simple 301 Redirect Manager is a simple to use, yet extensible, Umbraco Back-Office package that allows you to manage your 301 redirects directly in Umbraco. Includes a simple and intuitive refinement system where you can search for specific text within the URLs or notes defined for the redirect. 
 
 Utilizes [ngTable][ngTableLink] for an AngularJs driven data table which includes ordering by column (Old Url, New Url, Notes and Last Updated) and simple pagination with configurable items per page selector. 
 
