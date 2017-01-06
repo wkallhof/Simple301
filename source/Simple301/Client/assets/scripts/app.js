@@ -234,7 +234,7 @@ angular.module("umbraco.resources").factory("Simple301Api", function ($http) {
         },
         //Send data to add a new redirect
         add: function (isRegex, oldUrl, newUrl, notes) {
-            return $http.post("backoffice/Simple301/RedirectApi/Add", JSON.stringify({ isRegex, oldUrl: oldUrl, newUrl: newUrl, notes: notes }));
+            return $http.post("backoffice/Simple301/RedirectApi/Add", JSON.stringify({ isRegex: isRegex, oldUrl: oldUrl, newUrl: newUrl, notes: notes }));
         },
         //Send request to update an existing redirect
         update: function (redirect) {

@@ -298,8 +298,6 @@
     <None Include="app.config" />
     <Content Include="Client\package.manifest" />
     <None Include="packages.config" />
-    <None Include="Core\app.config" />
-    <None Include="Core\packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
