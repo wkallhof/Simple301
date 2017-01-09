@@ -32,6 +32,16 @@ namespace Simple301.Core
         }
 
         /// <summary>
+        /// Get all redirects from the repositry
+        /// </summary>
+        /// <returns>Collection of redirects</returns>
+        //public static IEnumerable<Redirect> ReloadRedirects()
+        //{
+        //    var _redirects = FetchRedirectsFromDb();
+        //    return GetAllRedirects();
+        //}
+
+        /// <summary>
         /// Get the lookup table for quick lookups
         /// </summary>
         /// <returns>Dictionary of OldUrl => Redirect </returns>
@@ -81,6 +91,41 @@ namespace Simple301.Core
 
             //return new redirect
             return newRedirect;
+        }
+
+
+        public static AddRedirectResponse AddRedirectFromCsv(string oldUrl, string newUrl, string notes)
+        {
+            if (!oldUrl.IsSet()) return new AddRedirectResponse { Success = false, Message = "Old URL must not be blank" };
+            if (!newUrl.IsSet()) return new AddRedirectResponse { Success = false, Message = "New URL must not be blank" };
+
+            //Ensure starting slash
+            oldUrl = oldUrl.EnsurePrefix("/").ToLower();
+
+            // Allow external redirects and ensure slash if not absolute
+            newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
+                newUrl.ToLower() :
+                newUrl.EnsurePrefix("/").ToLower();
+
+            if (_redirects.ContainsKey(oldUrl)) return new AddRedirectResponse { Success = false, Message = $"A redirect for {oldUrl} already exists" };
+            if (DetectLoop(oldUrl, newUrl)) return new AddRedirectResponse { Success = false, Message = $"Adding this redirect for {oldUrl} would cause a redirect loop" };
+
+            //Add redirect to DB
+            var db = ApplicationContext.Current.DatabaseContext.Database;
+            var newRedirect = new Redirect()
+            {
+                OldUrl = oldUrl,
+                NewUrl = newUrl,
+                LastUpdated = DateTime.Now.ToUniversalTime(),
+                Notes = notes
+            };
+            var idObj = db.Insert(newRedirect);
+            newRedirect.Id = Convert.ToInt32(idObj);
+
+            // Update the in-memory redirects collection  (NB Not fetching it again from the DB here in an attempt to optimise the bulk import process)
+            _redirects[newRedirect.OldUrl] = newRedirect;
+
+            return new AddRedirectResponse { NewRedirect = newRedirect, Success = true };
         }
 
         /// <summary>

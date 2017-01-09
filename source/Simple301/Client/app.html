@@ -80,6 +80,67 @@
     </div>
 </div>
 
+<!-- File Upload  -->
+<div id="Simple301Redirect" ng-controller="FileUploadController" class="card">
+
+    <!-- Header -->
+    <div class="row">
+        <h2>Bulk Import via CSV File Upload</h2>
+        <p>Select a CSV file that contains your redirect rules</p>
+        <p><strong>Important!</strong> The file should contain an <em>Old Url</em> column (required), a <em>New Url</em> column (required), and an optional <em>Notes</em> column, <strong>in that order</strong>.</p>
+    </div>
+
+    <!-- Error Message Content -->
+    <div class="row" ng-show="feedback.error">
+        <div class="col-md-12">
+            <div class="bs-component">
+                <div class="alert alert-dismissible alert-danger">
+                    <button type="button" class="close" ng-click="clearFeedback()">×</button>
+                    <p> Error : {{feedback.message}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message Content -->
+    <div class="row" ng-show="feedback.success">
+        <div class="col-md-12">
+            <div class="bs-component">
+                <div class="alert alert-dismissible alert-success">
+                    <button type="button" class="close" ng-click="clearFeedback()">×</button>
+                    <p> Bulk Import Success : {{feedback.message}}</p>
+                </div>
+
+            </div>
+            <div ng-show="feedback.failedRedirects.length > 0">
+                <h3>Failed imports</h3>
+                <ul ng-repeat="item in feedback.failedRedirects">
+                    <li>{{item.Message}}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-upload">
+                <button class="btn btn-info"
+                        ng-file-select
+                        ng-model="files"
+                        ng-file-change="acceptSelectedFile(files)"
+                        ng-multiple="false"
+                        accept=".csv"
+                        ng-show="!isUploading">
+                    Choose File
+                </button>
+                <input type="text" disabled ng-model="file.name" ng-show="!isUploading" class="input-textbox-upload" />
+                <button class="btn btn-success" data-ng-click="uploadFile()">Upload</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
 <!-- Pagination Template for ngTable redirect table -->
 <script type="text/ng-template" id="pager">
 
