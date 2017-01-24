@@ -89,7 +89,15 @@ namespace Simple301.Core
             {
                 return new DeleteRedirectResponse() { Success = false, Message = "There was an error deleting the redirect : " + e.Message };
             }
-            
+        }
+
+        /// <summary>
+        /// POST to clear cache
+        /// </summary>
+        [HttpPost]
+        public void ClearCache()
+        {
+            RedirectRepository.ClearCache();
         }
     }
 }

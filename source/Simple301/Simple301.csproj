@@ -170,6 +170,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Core.7.3.1\lib\System.Data.SqlServerCe.dll</HintPath>
@@ -293,6 +294,11 @@
     <Compile Include="Core\RedirectApplicationEvents.cs" />
     <Compile Include="Core\RedirectContentFinder.cs" />
     <Compile Include="Core\RedirectRepository.cs" />
+    <Compile Include="Core\Utilities\Caching\CacheItem.cs" />
+    <Compile Include="Core\Utilities\Caching\CacheManager.cs" />
+    <Compile Include="Core\Utilities\Caching\CacheManagerStatus.cs" />
+    <Compile Include="Core\Utilities\SettingsKeys.cs" />
+    <Compile Include="Core\Utilities\SettingsUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

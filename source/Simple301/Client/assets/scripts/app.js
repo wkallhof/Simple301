@@ -11,6 +11,7 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     $scope.errorMessage = '';
     //App state
     $scope.initialLoad = false;
+    $scope.cacheCleared = false;
 
     /*
     * Refresh the table. Uses $scope.redirects for data
@@ -21,6 +22,15 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
 
         $scope.tableParams.total($scope.redirects.length);
         $scope.tableParams.reload();
+    }
+
+    /*
+    * Handles clearing the cache by
+    * calling to get all redirects again
+    */
+    $scope.clearCache = function () {
+        $scope.fetchRedirects();
+        $scope.cacheCleared = true;
     }
 
     /*

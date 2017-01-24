@@ -10,6 +10,13 @@
                         <i class="md md-list"></i>
                         Simple 301 - Redirect Manager
                     </h1>
+
+                    <!-- Clear Cache -->
+                    <div class="pull-right">
+                        <span ng-show="cacheCleared">Cache Cleared!</span>
+                        <button class="btn btn-info btn-sm" ng-click="clearCache()">Clear Cache</button>
+                    </div>
+
                     <p class="lead">
                         Add, Update, and Delete 301 redirects in the table below.
                     </p>
