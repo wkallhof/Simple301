@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Simple301</id>
-    <version>1.0.9</version>
+    <version>1.1.0</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
     <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
@@ -10,9 +10,9 @@
     <projectUrl>https://github.com/wkallhof/Simple301</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Umbraco 301 Redirect Manager for the Umbraco Back-Office</description>
-    <copyright>Copyright 2015</copyright>
+    <copyright>Copyright 2017</copyright>
     <tags>umbraco</tags>
-    <releaseNotes>Updating to fix issue with running migrations and regex support</releaseNotes>
+    <releaseNotes>Updating with architecture to support load balanced environments</releaseNotes>
   </metadata>
   <files>
     <file src="..\source\Simple301\bin\release\net452\Simple301.dll" target="lib\net452" />
