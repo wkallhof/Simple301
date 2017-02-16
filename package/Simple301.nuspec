@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Simple301</id>
-    <version>1.1.1</version>
+    <version>1.1.3</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
     <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
@@ -20,7 +20,7 @@
     <file src="..\source\Simple301\Client\**\*.*" target="content\App_Plugins\Simple301" />
     <file src="Dashboard.config.install.xdt" target="content\Config"/>
     <file src="Dashboard.config.uninstall.xdt" target="content\Config"/>
-    <file src="Web.config.install.xdt" target=""/>
-    <file src="Web.config.uninstall.xdt" target=""/>
+    <file src="Web.config.install.xdt" target="content"/>
+    <file src="Web.config.uninstall.xdt" target="content"/>
   </files>
 </package>
