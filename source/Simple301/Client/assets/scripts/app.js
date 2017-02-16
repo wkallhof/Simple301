@@ -29,8 +29,8 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
     * calling to get all redirects again
     */
     $scope.clearCache = function () {
-        $scope.fetchRedirects();
         $scope.cacheCleared = true;
+        return Simple301Api.clearCache().then($scope.fetchRedirects.bind(this));
     }
 
     /*
@@ -221,7 +221,14 @@ angular.module("umbraco").controller("Simple301Controller", function ($scope, $f
         //If we have a tab, set the click handler so we only
         //load the content on tab click. 
         if ($scope.$tab && $scope.$tab.length > 0) {
+            var $parent = $scope.$tab.parent();
+
+            // bind click event
             $scope.$tab.on('click', $scope.initLoad.bind(this));
+
+            // if it is selected already or there is only one tab, init load
+            if ($parent.hasClass('active') || $parent.children().length == 1)
+                $scope.initLoad();
         }
         else {
             $scope.initLoad();
@@ -253,6 +260,11 @@ angular.module("umbraco.resources").factory("Simple301Api", function ($http) {
         //Remove / Delete an existing redirect
         remove: function (id) {
             return $http.delete("backoffice/Simple301/RedirectApi/Delete/" + id);
+        },
+
+        //Clear cache
+        clearCache: function () {
+            return $http.post("backoffice/Simple301/RedirectApi/ClearCache");
         }
     };
 });
