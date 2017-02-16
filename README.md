@@ -13,6 +13,25 @@ Integrates directly with the Umbraco Content Pipeline, inserting itself in the f
 
 Nuget Package: ` Install-Package Simple301 `
 
+### Configuration ###
+By default, your `web.config` file will be updated with two application settings which are used to manage the cached state of the redirects that are created. They are as default :
+```xml
+<configuration>
+   ...
+  <appSettings>
+      ...
+      <add key="Simple301.CacheDurationInSeconds" value="3600"/>
+      <add key="Simple301.CacheEnabled" value="true"/>
+  </appSettings>
+</configuration>
+```
+
+**Simple301.CacheDurationInSeconds** : This allows you to configure how long redirects are cached within the site. This only affects the user facing redirects so that the application doesn't read from the database for every request in the site. If you modify redirects within the back-office, the cache is automatically cleared per action (Add, Update, Delete). 
+
+**Simple301.CacheEnabled** : This allows you to toggle whether or not caching is enabled. Since this package is hit for every requested URL in the site, it is important to consider the performance implications of disabling cache. Use this to troubleshoot redirect issues.
+
+These caching settings were added in order to support load balanced environments, where in previous versions the applications held on to redirects only in memory (persisting to the DB only if modified), which doesn't work in a load balanced environement (they may exist in a memory collection on one server, but not on the other). 
+
 ### Usage ###
 
 #### 1. Locate Simple301 Redirect Manager in the Content section ####
