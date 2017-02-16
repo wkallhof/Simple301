@@ -88,6 +88,9 @@ namespace Simple301.Core
                 Notes = notes
             });
 
+            //Clear the current cache
+            ClearCache();
+
             //Fetch the added redirect
             var newRedirect = FetchRedirectById(Convert.ToInt32(idObj));
 
@@ -129,6 +132,9 @@ namespace Simple301.Core
             redirect.LastUpdated = DateTime.Now.ToUniversalTime();
             db.Update(redirect);
 
+            //Clear the current cache
+            ClearCache();
+
             //return updated redirect
             return redirect;
         }
@@ -145,6 +151,9 @@ namespace Simple301.Core
             //Get database context and delete
             var db = ApplicationContext.Current.DatabaseContext.Database;
             db.Delete(item);
+
+            //Clear the current cache
+            ClearCache();
         }
 
         /// <summary>
@@ -190,8 +199,6 @@ namespace Simple301.Core
             if (fromCache)
                 return _cacheManager.GetAndSet(CACHE_CATEGORY, CACHE_ALL_KEY, () => FetchRedirectsFromDb());
 
-            // if not from cache, we should clear cache and return new set
-            _cacheManager.DeleteItem(CACHE_CATEGORY, CACHE_ALL_KEY);
             return FetchRedirectsFromDb();
         }
 
@@ -205,7 +212,7 @@ namespace Simple301.Core
             var query = "SELECT * FROM Redirects WHERE Id=@0";
 
             if (fromCache)
-                return _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + id, () => FetchRedirectFromDbByQuery(query, id));
+                return _cacheManager.GetAndSet(CACHE_CATEGORY, "Id:" + id, () => FetchRedirectFromDbByQuery(query, id));
 
             return FetchRedirectFromDbByQuery(query, id);
         }
