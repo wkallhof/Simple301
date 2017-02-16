@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>Simple301</id>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <authors>WMK.IO</authors>
     <owners>WMK.IO</owners>
     <licenseUrl>https://raw.githubusercontent.com/wkallhof/Simple301/master/LICENSE</licenseUrl>
@@ -12,7 +12,7 @@
     <description>Umbraco 301 Redirect Manager for the Umbraco Back-Office</description>
     <copyright>Copyright 2017</copyright>
     <tags>umbraco</tags>
-    <releaseNotes>Updating with architecture to support load balanced environments</releaseNotes>
+    <releaseNotes>Updating with architecture to support load balanced environments. Adding web.config transform</releaseNotes>
   </metadata>
   <files>
     <file src="..\source\Simple301\bin\release\net452\Simple301.dll" target="lib\net452" />
@@ -20,5 +20,7 @@
     <file src="..\source\Simple301\Client\**\*.*" target="content\App_Plugins\Simple301" />
     <file src="Dashboard.config.install.xdt" target="content\Config"/>
     <file src="Dashboard.config.uninstall.xdt" target="content\Config"/>
+    <file src="Web.config.install.xdt" target=""/>
+    <file src="Web.config.uninstall.xdt" target=""/>
   </files>
 </package>

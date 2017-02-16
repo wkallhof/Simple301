@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <appSettings>
+      <add key="Simple301.CacheDurationInSeconds" value="3600" xdt:Locator="Match(key)" xdt:Transform="Remove"/>
+      <add key="Simple301.CacheEnabled" value="true" xdt:Locator="Match(key)" xdt:Transform="Remove"/>
+  </appSettings>
+</configuration>
