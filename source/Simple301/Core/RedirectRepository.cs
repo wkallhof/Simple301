@@ -66,7 +66,7 @@ namespace Simple301.Core
 
             // Allow external redirects and ensure slash if not absolute
             newUrl = Uri.IsWellFormedUriString(newUrl, UriKind.Absolute) ?
-                newUrl.ToLower() : 
+                newUrl : 
                 newUrl.EnsurePrefix("/").ToLower();
 
             // First look for single match
@@ -115,7 +115,7 @@ namespace Simple301.Core
 
             // Allow external redirects and ensure slash if not absolute
             redirect.NewUrl = Uri.IsWellFormedUriString(redirect.NewUrl, UriKind.Absolute) ?
-                redirect.NewUrl.ToLower() :
+                redirect.NewUrl :
                 redirect.NewUrl.EnsurePrefix("/").ToLower();
 
 
