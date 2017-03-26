@@ -1,13 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <dashBoard xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
-   <section alias="StartupDashboardSection" xdt:Locator="Match(alias)">
-	<areas>
-      <area>content</area>
-    </areas>   
-    <tab caption="Manage Redirects" xdt:Locator="Match(caption)" xdt:Transform="Remove">
-      <control>
-        ../App_Plugins/Simple301/app.html
-      </control>
-    </tab>
+   <section alias="Simple301BackOffice" xdt:Locator="Match(alias)"  xdt:Transform="Remove">
   </section>
 </dashBoard>
