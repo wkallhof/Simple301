@@ -227,7 +227,7 @@ namespace Simple301.Core
             var query = "SELECT * FROM Redirects WHERE OldUrl=@0";
 
             if (fromCache)
-                return _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + oldUrl, () => FetchRedirectFromDbByQuery(query, oldUrl));
+                return _cacheManager.GetAndSet(CACHE_CATEGORY, "OldUrl:" + oldUrl.TrimEnd('/'), () => FetchRedirectFromDbByQuery(query, oldUrl.TrimEnd('/')));
 
             return FetchRedirectFromDbByQuery(query, oldUrl);
         }
