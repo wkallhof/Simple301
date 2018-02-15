@@ -9,6 +9,7 @@ using System.Linq;
 using Umbraco.Core.Persistence.Migrations;
 using System;
 using System.Web;
+using Simple301.Core.Utilities;
 using Umbraco.Core.Services;
 
 namespace Simple301.Core
@@ -23,7 +24,16 @@ namespace Simple301.Core
         /// </summary>
         protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ContentFinderResolver.Current.InsertType<RedirectContentFinder>(0);
+            var settingsUtility = new SettingsUtility();
+
+            var customRedirectContentFinder = settingsUtility.AppSettingExists(SettingsKeys.CustomRedirectContentFinderKey) ?
+                settingsUtility.GetAppSetting<bool>(SettingsKeys.CustomRedirectContentFinderKey) :
+                false;
+
+            if (!customRedirectContentFinder)
+            {
+                ContentFinderResolver.Current.InsertType<RedirectContentFinder>(0);
+            }
         }
 
         /// <summary>

@@ -7,5 +7,6 @@
     {
         public static string CacheDurationKey = "Simple301.CacheDurationInSeconds";
         public static string CacheEnabledKey = "Simple301.CacheEnabled";
+        public static string CustomRedirectContentFinderKey = "Simple301.CustomRedirectContentFinder";
     }
 }

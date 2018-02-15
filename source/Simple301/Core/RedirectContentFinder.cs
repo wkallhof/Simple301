@@ -1,5 +1,5 @@
 ﻿using Umbraco.Web.Routing;
-using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Simple301.Core
 {
@@ -17,6 +17,22 @@ namespace Simple301.Core
             //Check the table
             var matchedRedirect = RedirectRepository.FindRedirect(path);
             if (matchedRedirect == null) return false;
+
+            // Groups match replace
+            string newUrl = matchedRedirect.NewUrl;
+
+            if (matchedRedirect.IsRegex && matchedRedirect.OldUrl.Contains("(.*)"))
+            {
+                var match = Regex.Match(path, matchedRedirect.OldUrl);
+
+                if (match.Groups.Count > 1)
+                {
+                    for (int iGrp = 1; iGrp < match.Groups.Count; iGrp++)
+                    {
+                        newUrl = newUrl.Replace($"${iGrp}", match.Groups[iGrp].Value);
+                    }
+                }
+            }
 
             //Found one, set the 301 redirect on the request and return
             request.SetRedirectPermanent(matchedRedirect.NewUrl);
