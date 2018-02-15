@@ -4,5 +4,6 @@
   <appSettings>
       <add key="Simple301.CacheDurationInSeconds" value="3600" xdt:Transform="Insert"/>
       <add key="Simple301.CacheEnabled" value="true" xdt:Transform="Insert"/>
+	  <add key="Simple301.CustomRedirectContentFinder" value="false" xdt:Transform="Insert"/>
   </appSettings>
 </configuration>
