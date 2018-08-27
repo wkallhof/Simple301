@@ -23,7 +23,10 @@ namespace Simple301.Core
         /// </summary>
         protected override void ApplicationStarting(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            ContentFinderResolver.Current.InsertType<RedirectContentFinder>(0);
+            if (!ContentFinderResolver.Current.ContainsType(typeof(RedirectContentFinder)))
+            {
+                ContentFinderResolver.Current.InsertType<RedirectContentFinder>(0);
+            }
         }
 
         /// <summary>
