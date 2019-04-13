@@ -1,5 +1,6 @@
+# No longer being maintained! Please reach out if you'd like to take ownership
 
-# Simple301#
+# Simple301
 ### 301 Redirect Manager for Umbraco ###
 [![Build status](https://img.shields.io/appveyor/ci/wkallhof/simple301/master.svg)](https://ci.appveyor.com/project/wkallhof/simple301/branch/master)
 
