@@ -81,6 +81,19 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Error Message Content -->
+                    <div class="row" ng-show="errorMessage.length > 0">
+                        <div class="col-md-12">
+                            <div class="bs-component">
+                                <div class="alert alert-dismissible alert-danger">
+                                    <button type="button" class="close" ng-click="clearErrorMessage()">×</button>
+                                    <p> Error : {{errorMessage}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </div>
